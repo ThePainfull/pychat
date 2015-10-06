@@ -1,7 +1,0 @@
-import requests
-
-def exchange_rate(currency):
-    r=requests.get("http://api.fixer.io/latest?base=CHF").json()
-
-    try:return "La valeur de 1 franc suisse en {} est de {} {} .".format(currency,r["rates"] [currency],currency)
-    except:return("La devise n'existe pas ou n'est pas dans la liste")
