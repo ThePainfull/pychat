@@ -1,0 +1,28 @@
+import requests
+#on importe le module requests
+def exchange_rate():
+    r=requests.get("http://api.fixer.io/latest?base=CHF").json()
+    #on importe des données sur une page internet avec get et json
+    dico_currency={"dollars australiens":"AUD","levs bulgares":"BGN","réals brésiliens":"BRL","dollars canadiens":"CAD","yuans chinois":"CNY","couronnes tchèques":"CZK","couronnes danoises":"DKK","livres sterling":"GBP","dollars de Hong Kong":"HKD","kunas croates":"HRK","forints hongrois":"HUF","roupies indonésiennes":"IDR","shekels israéliens":"ILS","roupies indiennes":"INR","yens japonais":"JPY","wons coréens":"KRW","pesos mexicains":"MXN","ringgits malaisiens":"MYR","couronnes norvégiennes":"NOK","dollars néo-zélandais":"NZD","pesos philippins":"PHP","zlotys polonais":"PLN","leus roumains":"RON","roubles russes":"RUB","couronnes suédoises":"SEK","dollars de Singapour":"SGD","bahts thailandais":"THB","livres turques":"TRY","dollars américains":"USD","rands sud-africains":"ZAR","euros":"EUR"}
+    #on crée un dictionnaire avec comme clés le nom des devises et comme valeurs leurs codes respectifs
+    for clé in dico_currency.keys():
+       print(clé)
+    #on imprime la liste de tous les noms de devises
+    currency=input("choisissez dans la liste la devise dans laquelle vous voulez convertir le franc suisse: ")
+    #on demande à l'utilisateur de rentrer le nom d'une des devises dans la liste
+
+    try:return "La valeur de 1 franc suisse en {} est de {} {}.".format(currency,r["rates"][(dico_currency)[currency]],(dico_currency)[currency])
+    #on affiche la phrase avec 1.la devise qu'on a rentré  2.on cherche dans les données la valeur associée au code de la devise qu'on a rentré  3.le code de la devise qu'on a rentré
+    except:return("La devise n'est pas dans la liste")
+    #message d'erreur qui apparait si on ne rentre pas le nom d'une des devises dans la liste
+
+def weather():
+   s=requests.get("http://api.openweathermap.org/data/2.5/weather?q=geneva&units=metric").json()
+   t=requests.get("http://api.openweathermap.org/data/2.5/forecast?q=geneva&units=metric").json()
+   #on importe des données sur une page internet avec get et json
+   dico_weather={}
+   return "La température actuelle à Genève est de {}°C. Le taux d'humidité est de {} %. La vitesse du vent est de {} km/heure. La couverture nuageuse est de {} %.".format(round(s["main"]["temp"], 2),s["main"]["humidity"],round(s["wind"]["speed"]*3.6,2),s["clouds"]["all"])
+   #on affiche la phrase avec différentes informations qu'on prend sur la page internet
+   #on convertit la température qui est en Kelvins en degrés Celsius et on arrondit à 2 décimales
+   #on convertit la vitesse du vent qui est en m/s en km/heure et on arrondit à 2 décimales
+   
