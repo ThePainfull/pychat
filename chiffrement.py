@@ -1,5 +1,5 @@
 #!!!!le message à crypter ne doit pas comporter les caractères suivants: é , è , à , ö , ü , ä , ç , £ , § , °
-#le module AES ne peut pas décrypter ces caractères après les avoir cryptés
+#la fonction ne peut pas décrypter ces caractères après les avoir cryptés
 from Crypto.Cipher import AES
 #packages qui contiennent des algorithmes de cryptage,on importe le module Advanced Encryption Standard
 from Crypto.Util import Counter
