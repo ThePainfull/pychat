@@ -17,10 +17,16 @@ def exchange_rate():
     #message d'erreur qui apparait si on ne rentre pas le nom d'une des devises dans la liste
 
 def weather():
-   s=requests.get("http://api.openweathermap.org/data/2.5/weather?q=geneva&units=metric&lang=fr").json()
-   #on importe des données sous la forme d'un dictionnaire sur une page internet avec get et json sur le temps à genève,on met metric pour avoir les °C
+   s=requests.get("http://api.openweathermap.org/data/2.5/weather?q=geneva&units=metric&lang=fr")
+   #on importe des données sous la forme d'un dictionnaire sur une page internet avec get sur le temps à genève,on met metric pour avoir les °C et lang=fr pour avoir le francais
+   if s.status_code !=200:
+       print("erreur: status_code:{}. limite de requetes atteint".format(s.status_code))
+       return
+   #on affiche une erreur que le programme retourne quand trop de requetes ont été faites
+   s=s.json()
+   #on convertit les données en json
    return "Le temps à Genève est {}. La température actuelle est de {}°C. Le taux d'humidité est de {} %. La vitesse du vent est de {} km/heure. La couverture nuageuse est de {} %.".format(s["weather"][-1]["description"],round(s["main"]["temp"], 2),s["main"]["humidity"],round(s["wind"]["speed"]*3.6,2),s["clouds"]["all"])
    #on affiche la phrase avec différentes informations qu'on prend sur la page internet
    #on convertit la température qui est en Kelvins en degrés Celsius et on arrondit à 2 décimales
    #on convertit la vitesse du vent qui est en m/s en km/heure et on arrondit à 2 décimales
-   
+
