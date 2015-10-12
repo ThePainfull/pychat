@@ -1,0 +1,34 @@
+def weather():
+   x=input("mettez 0 pour la météo actuelle, 1 pour toutes les prévisions sur les 5 prochains jours, 2 pour les prévisions à un moment donné sur les 5 prochains jours: ")
+   #on demande à l'utilisateur d'indiquer quelle information il veut obtenir
+   x=int(x)
+   s=requests.get("http://api.openweathermap.org/data/2.5/weather?q=geneva&units=metric&lang=fr&appid=2b12f8a41f0095da74a8c02a6b345053")
+   t=requests.get("http://api.openweathermap.org/data/2.5/forecast?q=Geneva&units=metric&lang=fr&appid=2b12f8a41f0095da74a8c02a6b345053")
+   #on importe des données sous la forme d'un dictionnaire sur une page internet avec get sur le temps à genève,on met metric pour avoir les °C et lang=fr pour avoir le francais
+   if s.status_code !=200:
+       print("erreur: status_code:{}. limite de requetes atteint".format(s.status_code))
+       return
+   elif t.status_code !=200:
+       print("erreur: status_code:{}. limite de requetes atteint".format(t.status_code))
+       return
+   #erreurs que le programme retourne quand trop de requetes ont été faites
+   s=s.json()
+   t=t.json()
+   #on convertit les données en json
+   if x==0:
+    return "Le temps à Genève est {}. La température actuelle est de {}°C. Le taux d'humidité est de {} %. La vitesse du vent est de {} km/heure. La couverture nuageuse est de {} %.".format(s["weather"][-1]["description"],s["main"]["temp"],s["main"]["humidity"],round(s["wind"]["speed"]*3.6,2),s["clouds"]["all"])
+   #on affiche la phrase avec différentes informations qu'on prend sur la page internet
+   #on convertit la vitesse du vent qui est en m/s en km/heure et on arrondit à 2 décimales
+   i=0
+   if x==1:
+    while i<38:
+     print("Le {}, le temps à Genève sera {}. La température sera de {}°C. Le taux d'humidité sera de {} %. La vitesse du vent sera de {} km/heure. La couverture nuageuse sera de {} %.".format(t["list"][i]["dt_txt"],t["list"][i]["weather"][0]["description"],t["list"][i]["main"]["temp"],t["list"][i]["main"]["humidity"],round(t["list"][i]["wind"]["speed"]*3.6,2),t["list"][i]["clouds"]["all"]))
+     i+=1
+   #on affiche une liste des prévisions toutes les 3 heures sur 5 jours
+   if x==2:
+    y=input("indiquez la date et l'heure comme suit: jour(0 pour aujourd'hui, 1 pour demain...),heure du jour(indiquez un de ces nombres: 0, 3, 6, 9, 12, 15, 18, 21)")
+    #on demande à l'utilisateur d'indiquer le jour et l'heure pour sa prévision
+    dico_weather={"0,9":0,"0,12":1,"0,15":2,"0,18":3,"0,21":4,"1,0":5,"1,3":6,"1,6":7,"1,9":8,"1,12":9,"1,15":10,"1,18":11,"1,21":12,"2,0":13,"2,3":14,"2,6":15,"2,9":16,"2,12":17,"2,15":18,"2,18":19,"2,21":20,"3,0":21,"3,3":22,"3,6":23,"3,9":24,"3,12":25,"3,15":26,"3,18":27,"3,21":28,"4,0":29,"4,3":30,"4,6":31,"4,9":32,"4,12":33,"4,15":34,"4,18":35,"4,21":36,"5,0":37,}
+    #on crée un dictionnaire avec comme clés le jour et l'heure et comme valeurs le numéro de la prévision dans la liste de prévisions
+    return "Le {}, le temps à Genève sera {}. La température sera de {}°C. Le taux d'humidité sera de {} %. La vitesse du vent sera de {} km/heure. La couverture nuageuse sera de {} %.".format(t["list"][(dico_weather)[y]]["dt_txt"],t["list"][(dico_weather)[y]]["weather"][0]["description"],t["list"][(dico_weather)[y]]["main"]["temp"],t["list"][(dico_weather)[y]]["main"]["humidity"],round(t["list"][(dico_weather)[y]]["wind"]["speed"]*3.6,2),t["list"][(dico_weather)[y]]["clouds"]["all"])
+    #on affiche la phrase avec différentes informations qu'on prend sur la page internet
